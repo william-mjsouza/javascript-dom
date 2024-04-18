@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banner Rotativo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="banner">
+        <h1>Banner Rotativo</h1>
+        <div id="carrossel">
+            <img src="imagens/bebidas/Caipirinha-de-frutas-vermelhas.jpg" alt="imagem1">
+            <img src="imagens/entradas/Camarões-crocantes-com-molho-aioli-de-limão.jpg" alt="imagem2">
+            <img src="imagens/sobremesas/Mousse-de-chocolate-belga-com-raspas-de-laranja.jpg" alt="imagem3">
+
+            <img src="imagens/pratos-principais/Frango-recheado-com-queijo-gruyère-e-espinafre-ao-molho-de-mostarda.jpg" alt="imagem4">
+            <img src="imagens/sobremesas/Tiramisù-clássico-com-café-expresso.jpg" alt="imagem5">
+            <img src="imagens/entradas/Croquetes-de-queijo-brie-com-geleia-de-pimenta.jpg" alt="imagem6">
+
+            <img src="imagens/bebidas/Coquetel-de-Gin-Tônica-com-zimbro.jpg" alt="imagem7">
+            <img src="imagens/pratos-principais/Risoto-de-cogumelos-selvagens-trufado.jpg" alt="imagem8">
+            <img src="imagens/sobremesas/Crème-brûlée-de-baunilha-bourbon.jpg" alt="imagem9">
+        </div>
+
+        <div id="controle">
+            <span class="controles"></span>
+            <span class="controles"></span>
+            <span class="controles"></span>
+        </div>
+    </div>
+
+    <script>
+    //======================================================================================================
+    //                                               Funções 
+    //======================================================================================================
+    // Função para agrupar sequencialmente os elementos de um vetor
+    function agrupar(vetor, tam_grupo) {
+        // Array grupos cujo tamanho depente da quantidade de elementos do array vetor 
+        var grupos = [];
+
+        // Array grupo cujo tamanho depende da quantidade de elementos sequenciais o que o usuário quer agrupar do array vetor
+        var grupo = [];
+
+        // Variável para atualizar o intervalo de agrupamento
+        var j = 0;
+        // Percorre o array vetor
+        for (var i = 0; i < vetor.length; i++) {
+            // Adiciona o elemento caso ele esteja no intervalo de agrupamento
+            if ((i >= (tam_grupo * j)) && (i < (tam_grupo * (j + 1)))) {
+                grupo.push(vetor[i]);
+            }
+
+            // Atualiza o intervalo após ser formado um grupo
+            if (grupo.length == tam_grupo) {
+                grupos.push(grupo);
+                grupo = [];
+                j++
+            }
+        }
+
+        return grupos;
+    }
+    
+    function clicar(botao) {
+
+        // Criação do vetor gruposDeTres cujos elementos são vetores com 3 imagens sequenciais do banner em cada um deles
+        var grupoDeTres = agrupar(imagens, 3)
+
+        // Controla a exibição do display das imagens ao apertar os botões
+        // grupoDeTres = [[img1, img2, img3],
+        //                [img4, img5, img6],
+        //                [img7, img8, img9]]
+        
+        for (i = 0; i < grupoDeTres.length; i++) {
+            for (var j = 0; j < 3; j++) {
+                switch (botao) {
+                    // Se o botão clicado for o 1º
+                    case 0:
+                        // Só exibe as 3 primeiras (grupo 0)
+                        if (i == 0) {
+                            grupoDeTres[i][j].style.display = 'inline-block';
+                        }
+                        else {
+                            grupoDeTres[i][j].style.display = 'none';
+                        }
+                        break;
+                    // Se o botão clicado for o 2º
+                    case 1:
+                        // Só exibe as 3 do meio (grupo 1)
+                        if (j == 1) {
+                            grupoDeTres[i][j].style.display = 'inline-block';
+                        }
+                        else {
+                            grupoDeTres[i][j].style.display = 'none';
+                        }
+                        break;
+                    // Se o botão clicado for o 3º
+                    case 2:
+                        // Só exibe as 3 últimas (grupo 2)
+                        if (j == 2) {
+                            grupoDeTres[i][j].style.display = 'inline-block';
+                        }
+                        else {
+                            grupoDeTres[i][j].style.display = 'none';
+                        }
+                        break;
+                    // Para qulquer outro caso
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    //======================================================================================================
+    //                                       Função Principal (main)
+    //======================================================================================================
+    // Seleciona todos os elementos img que estão dentro da div de ID = "carrossel" e coloca no vetor imagens
+    var imagens = document.querySelectorAll('div#carrossel>img');
+
+    // Seleciona todos os elementos de class = "controles" e coloca no vetor botoes
+    var botoes = document.querySelectorAll('.controles');
+
+    // Só as 3 primeiras imagens inicializam com display inline-block (as outras estão apagadas -> display none no CSS)
+    for (var i = 0; i < imagens.length; i++) {
+        if (i < 3) {
+            imagens[i].style.display = 'inline-block';
+        }
+    }
+
+    // Adiciona um escutador de eventos de clique em cada um dos botões do banner
+    for (i = 0; i < 3; i++) {
+        botoes[i].addEventListener('click', (function(i) {
+                return function() {
+                        clicar(i);
+                }
+        })(i));
+    }
+    </script>
+</body>
+</html>
