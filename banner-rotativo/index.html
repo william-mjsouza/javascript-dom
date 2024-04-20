@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banner Rotativo</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+
 </head>
 <body>
     <div id="banner">
@@ -21,12 +23,21 @@
             <img src="imagens/bebidas/Coquetel-de-Gin-Tônica-com-zimbro.jpg" alt="imagem7">
             <img src="imagens/pratos-principais/Risoto-de-cogumelos-selvagens-trufado.jpg" alt="imagem8">
             <img src="imagens/sobremesas/Crème-brûlée-de-baunilha-bourbon.jpg" alt="imagem9">
+
+            <img src="imagens/pratos-principais/Frango-recheado-com-queijo-gruyère-e-espinafre-ao-molho-de-mostarda.jpg" alt="imagem4">
+            <img src="imagens/sobremesas/Tiramisù-clássico-com-café-expresso.jpg" alt="imagem5">
+            <img src="imagens/entradas/Croquetes-de-queijo-brie-com-geleia-de-pimenta.jpg" alt="imagem6">
+     
+            <span id="esquerda"><i class="fas fa-chevron-left"></i></span>
+            <span id="direita"><i class="fas fa-chevron-right"></i></span>
         </div>
 
         <div id="controle">
             <span class="controles"></span>
+            <!--
+            <span class="controles"></span> 
             <span class="controles"></span>
-            <span class="controles"></span>
+             -->
         </div>
     </div>
 
@@ -55,7 +66,7 @@
             if (grupo.length == tam_grupo) {
                 grupos.push(grupo);
                 grupo = [];
-                j++
+                j++;
             }
         }
 
@@ -63,74 +74,110 @@
     }
     
     function clicar(botao) {
+        /* 
+        Se o mesmo botão for clicado novamente sem que outro botão tenha sido clicado entre os cliques, o código 
+        dentro da função clicar não será executado
+        */
+        if (!cliques[botao]) {
+            // Criação do vetor gruposDeTres cujos elementos são vetores com 3 imagens sequenciais do banner em cada um deles
+            //var grupoDeTres = agrupar(imagens, numImgsExibidas);
 
-        // Criação do vetor gruposDeTres cujos elementos são vetores com 3 imagens sequenciais do banner em cada um deles
-        var grupoDeTres = agrupar(imagens, 3)
-
-        // Controla a exibição do display das imagens ao apertar os botões
-        // grupoDeTres = [[img1, img2, img3],
-        //                [img4, img5, img6],
-        //                [img7, img8, img9]]
-        
-        for (i = 0; i < grupoDeTres.length; i++) {
-            for (var j = 0; j < 3; j++) {
-                switch (botao) {
-                    // Se o botão clicado for o 1º
-                    case 0:
-                        // Só exibe as 3 primeiras (grupo 0)
-                        if (i == 0) {
-                            grupoDeTres[i][j].style.display = 'inline-block';
+            // Controla a exibição do display das imagens ao apertar os botões
+            // grupoDeTres = [[img1, img2, img3],
+            //                [img4, img5, img6],
+            //                [img7, img8, img9]]
+            
+            for (var i = 0; i < gruposFormados.length; i++) {
+                for (var j = 0; j < numImgsExibidas; j++) {
+                    // Percorre todo o vetor botoes
+                    for (i = 0; i < quantGrupos; i++) {
+                        // Se a posição da vez do vetor coincidir com botão clicado
+                        if (i == botao) {
+                            // Muda a cor do botão pra cinza
+                            botoes[botao].style.backgroundColor = 'gray';
+                            // Exibe o grupo associado a ele
+                            gruposFormados[i][j].style.display = 'inline-block';
+                            //break;
                         }
+                        // Mas caso seja outro botão
                         else {
-                            grupoDeTres[i][j].style.display = 'none';
+                            // Muda a cor dele pra branco
+                            botoes[i].style.backgroundColor = 'white';
+                            // Não exibe o grupo associado a ele
+                            gruposFormados[i][j].style.display = 'none';
                         }
-                        break;
-                    // Se o botão clicado for o 2º
-                    case 1:
-                        // Só exibe as 3 do meio (grupo 1)
-                        if (j == 1) {
-                            grupoDeTres[i][j].style.display = 'inline-block';
-                        }
-                        else {
-                            grupoDeTres[i][j].style.display = 'none';
-                        }
-                        break;
-                    // Se o botão clicado for o 3º
-                    case 2:
-                        // Só exibe as 3 últimas (grupo 2)
-                        if (j == 2) {
-                            grupoDeTres[i][j].style.display = 'inline-block';
-                        }
-                        else {
-                            grupoDeTres[i][j].style.display = 'none';
-                        }
-                        break;
-                    // Para qulquer outro caso
-                    default:
-                        break;
+                    }
                 }
             }
-        }
+            
+            /* 
+            Garante que o código dentro da função clicar() seja executado apenas uma vez para cada conjunto de n
+            imagens correspondente a cada botão. Isso evita a execução repetida e desnecessária do código quando 
+            o usuário já estiver visualizando o conjunto de imagens correspondente ao botão clicado
+            */
+            for (i = 0; i < quantGrupos; i++) {
+                if (i == botao) {
+                    cliques[i] = true;
+                }
+                else {
+                    cliques[i] = false;
+                }
+            }
+        }     
     }
 
     //======================================================================================================
     //                                       Função Principal (main)
     //======================================================================================================
-    // Seleciona todos os elementos img que estão dentro da div de ID = "carrossel" e coloca no vetor imagens
+    // Variável para controlar o número de imagens exibidas por vez no banner
+    const numImgsExibidas = 3;
+
+    // Seleciona todos os elementos img que estão dentro da div de id = "carrossel" e coloca no vetor imagens
     var imagens = document.querySelectorAll('div#carrossel>img');
+
+    // Cria grupos de n imagens das imagens que o progrmador colocou no HTML
+    var gruposFormados = agrupar(imagens, numImgsExibidas);
+
+    // Seleciona o elemento div de id = "controle" (pai dos botões)
+    var controle = document.querySelector('div#controle');
+
+    // Cria novos elementos (botões) pra cada grupo de 3 imagens que existir (máximo 5)
+    // Se o tamanho do vetor imagens for um múltiplo de 3
+    var numImgs = imagens.length;
+    var quantGrupos = gruposFormados.length;
+    var i;
+    if ((numImgs % numImgsExibidas == 0) && (quantGrupos != 5)) {
+        for (i = 1; i < quantGrupos; i++) {
+            // Cria mais um novo botão
+            botao = document.createElement('span');
+
+            // Adiciona uma classe ao novo botão
+            botao.classList.add('controles');
+
+            // Adiciona o novo botão como filho do elemento pai
+            controle.appendChild(botao);
+        }
+    }
 
     // Seleciona todos os elementos de class = "controles" e coloca no vetor botoes
     var botoes = document.querySelectorAll('.controles');
 
     // Só as 3 primeiras imagens inicializam com display inline-block (as outras estão apagadas -> display none no CSS)
-    for (var i = 0; i < imagens.length; i++) {
-        if (i < 3) {
+    for (i = 0; i < numImgs; i++) {
+        if (i < numImgsExibidas) {
             imagens[i].style.display = 'inline-block';
         }
     }
 
+    // Inicializa as n variáves de controle de clique como false
+    var cliques = [];
+    for (i = 0; i < quantGrupos; i++) {
+        cliques.push(false);
+    }
+
     // Adiciona um escutador de eventos de clique em cada um dos botões do banner
-    for (i = 0; i < 3; i++) {
+    var numBotoes = botoes.length;
+    for (i = 0; i < numBotoes; i++) {
         botoes[i].addEventListener('click', (function(i) {
                 return function() {
                         clicar(i);
