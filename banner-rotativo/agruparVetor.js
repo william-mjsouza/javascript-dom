@@ -27,10 +27,11 @@ function agrupar(vetor, tam_grupo) {
 }
 
 
-
+/*
 var vetor = [0, 1, 15, 3, 4, 5, 6, 7, 8];   // Vetor que se deseja agrupar os elementos
 var tam_grupo = 2;                          // Tamanho do grupo que será formado com os elementos do vetor
 
 var grupos = agrupar(vetor, tam_grupo);
 
 console.log(grupos);
+*/

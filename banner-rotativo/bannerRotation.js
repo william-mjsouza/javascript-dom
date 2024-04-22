@@ -22,7 +22,7 @@ function agrupar(vetor, tam_grupo) {
         if (grupo.length == tam_grupo) {
             grupos.push(grupo);
             grupo = [];
-            j++
+            j++;
         }
     }
 
@@ -36,75 +36,42 @@ function clicar(botao) {
     */
     if (!cliques[botao]) {
         // Criação do vetor gruposDeTres cujos elementos são vetores com 3 imagens sequenciais do banner em cada um deles
-        var grupoDeTres = agrupar(imagens, numImgsExibidas);
+        //var grupoDeTres = agrupar(imagens, numImgsExibidas);
 
         // Controla a exibição do display das imagens ao apertar os botões
         // grupoDeTres = [[img1, img2, img3],
         //                [img4, img5, img6],
         //                [img7, img8, img9]]
         
-        for (i = 0; i < grupoDeTres.length; i++) {
+        for (var i = 0; i < gruposFormados.length; i++) {
             for (var j = 0; j < numImgsExibidas; j++) {
-                switch (botao) {
-                    // Se o botão clicado for o 1º
-                    case 0:
-                        // Muda a cor do botao pra cinza
+                // Percorre todo o vetor botoes
+                for (i = 0; i < quantGrupos; i++) {
+                    // Se a posição da vez do vetor coincidir com botão clicado
+                    if (i == botao) {
+                        // Muda a cor do botão pra cinza
                         botoes[botao].style.backgroundColor = 'gray';
-                        botoes[1].style.backgroundColor = 'white';
-                        botoes[2].style.backgroundColor = 'white';
-
-                        // Só exibe as 3 primeiras (grupo 0)
-                        if (i == 0) {
-                            grupoDeTres[i][j].style.display = 'inline-block';
-                        }
-                        else {
-                            grupoDeTres[i][j].style.display = 'none';
-                        }
-                        break;
-                    // Se o botão clicado for o 2º
-                    case 1:
-                        // Muda a cor do botao pra cinza
-                        botoes[0].style.backgroundColor = 'white';
-                        botoes[botao].style.backgroundColor = 'gray';
-                        botoes[2].style.backgroundColor = 'white';
-
-                        // Só exibe as 3 do meio (grupo 1)
-                        if (j == 1) {
-                            grupoDeTres[i][j].style.display = 'inline-block';
-                        }
-                        else {
-                            grupoDeTres[i][j].style.display = 'none';
-                        }
-                        break;
-                    // Se o botão clicado for o 3º
-                    case 2:
-                        // Muda a cor do botao pra cinza
-                        botoes[0].style.backgroundColor = 'white';
-                        botoes[1].style.backgroundColor = 'white';
-                        botoes[botao].style.backgroundColor = 'gray';
-
-                        // Só exibe as 3 últimas (grupo 2)
-                        if (j == 2) {
-                            grupoDeTres[i][j].style.display = 'inline-block';
-                        }
-                        else {
-                            grupoDeTres[i][j].style.display = 'none';
-                        }
-                        break;
-                    // Para qulquer outro caso
-                    default:
-                        botoes[botao].style.display = 'none';
-                        break;
+                        // Exibe o grupo associado a ele
+                        gruposFormados[i][j].style.display = 'inline-block';
+                        //break;
+                    }
+                    // Mas caso seja outro botão
+                    else {
+                        // Muda a cor dele pra branco
+                        botoes[i].style.backgroundColor = 'white';
+                        // Não exibe o grupo associado a ele
+                        gruposFormados[i][j].style.display = 'none';
+                    }
                 }
             }
         }
         
         /* 
-        Garante que o código dentro da função clicar() seja executado apenas uma vez para cada conjunto de 3
+        Garante que o código dentro da função clicar() seja executado apenas uma vez para cada conjunto de n
         imagens correspondente a cada botão. Isso evita a execução repetida e desnecessária do código quando 
         o usuário já estiver visualizando o conjunto de imagens correspondente ao botão clicado
         */
-        for (i = 0; i < cliques.length; i++) {
+        for (i = 0; i < quantGrupos; i++) {
             if (i == botao) {
                 cliques[i] = true;
             }
@@ -112,20 +79,19 @@ function clicar(botao) {
                 cliques[i] = false;
             }
         }
-    }
-    
+    }     
 }
 
 //======================================================================================================
 //                                       Função Principal (main)
 //======================================================================================================
-// Variável para controlar o número n de imagens exibidas por vez no banner
+// Variável para controlar o número de imagens exibidas por vez no banner
 const numImgsExibidas = 3;
 
-// Seleciona todos os elementos img que estão dentro da div e que tem o id = "carrossel" e coloca na NodeList imagens
+// Seleciona todos os elementos img que estão dentro da div de id = "carrossel" e coloca no vetor imagens
 var imagens = document.querySelectorAll('div#carrossel>img');
 
-// Forma os grupos de n imagens
+// Cria grupos de n imagens das imagens que o progrmador colocou no HTML
 var gruposFormados = agrupar(imagens, numImgsExibidas);
 
 // Seleciona o elemento div de id = "controle" (pai dos botões)
@@ -153,17 +119,21 @@ if ((numImgs % numImgsExibidas == 0) && (quantGrupos != 5)) {
 var botoes = document.querySelectorAll('.controles');
 
 // Só as 3 primeiras imagens inicializam com display inline-block (as outras estão apagadas -> display none no CSS)
-for (i = 0; i < imagens.length; i++) {
+for (i = 0; i < numImgs; i++) {
     if (i < numImgsExibidas) {
         imagens[i].style.display = 'inline-block';
     }
 }
 
-// Inicializa as variáves de controle de clique como false
-var cliques = [false, false, false]
+// Inicializa as n variáves de controle de clique como false
+var cliques = [];
+for (i = 0; i < quantGrupos; i++) {
+    cliques.push(false);
+}
 
 // Adiciona um escutador de eventos de clique em cada um dos botões do banner
-for (i = 0; i < botoes.length; i++) {
+var numBotoes = botoes.length;
+for (i = 0; i < numBotoes; i++) {
     botoes[i].addEventListener('click', (function(i) {
             return function() {
                     clicar(i);

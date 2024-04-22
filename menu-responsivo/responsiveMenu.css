@@ -1,0 +1,70 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+
+
+    text-decoration: none;  /* Remove o sublinhado dos links */
+    list-style-type: none;  /* Remove a bolinha dos itens da lista */
+}
+
+body {
+    position: relative;
+
+    display: flex;
+
+    width: 100vw;
+    height: 20vh;
+
+    background-color: rgb(48, 131, 179);
+
+}
+
+#hamburguerMenu, #close {
+    position: absolute;
+    right: 0;
+    z-index: 0;
+
+    padding: 5%;
+}
+
+#close {
+    /*
+    Controla a exibição do menu de navegação display
+    display: none;
+    */
+    z-index: 2;
+}
+
+i {
+    font-size: 2em;
+    color: white;
+}
+
+#navigationMenu {
+    position: absolute;
+    z-index: 1;
+
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100vw;
+    height: 30vh;
+
+    background-color: lightgrey;  
+    /*
+    Controla a exibição do menu de navegação display
+    display: none;
+    */
+}
+
+#navigationMenu > ul {
+    background-color: orange;
+}
+
+#navigationMenu > ul > li {
+    padding: 30%;
+}

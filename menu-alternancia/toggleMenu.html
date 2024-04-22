@@ -1,0 +1,93 @@
+<!--=================================================================================================================
+Um menu toggle, também conhecido como menu de alternância, é um tipo de menu que alterna entre estar visível e oculto 
+quando você clica ou toca em um botão ou ícone.
+Ex.:
+Menu hambúrguer -> Três linhas horizontais. Quando você clica no ícone do hamburger, o menu se expande. Quando você 
+clica novamente, o menu se contrai
+==================================================================================================================-->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu de Alternância</title>
+    <link rel="stylesheet" href="toggleMenu.css">
+</head>
+<body>
+    <!-- Botão do menu hamburguer -->
+    <button id="btn-menu" onclick="animar()">
+        <!-- Três linhas horizontais do menu hambúrguer -->
+        <span class="linha"></span>
+        <span class="linha"></span>
+        <span class="linha"></span>
+    </button>
+    <script>
+        function animar() {
+            // Se for a 1ª vez que o botão está sendo clicado, acontece a animação
+            if(!clicouBotaoMenu) {
+                // Tempo de animação para o primeiro botão
+                botaoMenu.style.transition = animationTime;
+                // A borda do botão fica vermelha
+                botaoMenu.style.border = '4px solid red';
+
+                // A linha do meio some instantaneamente (remove o tempo de animação da linha do meio)
+                linhas[1].style.transition = '';
+                linhas[1].style.width = '0';
+
+                // A translação vertical das linhas é calculada de forma a centralizar o centro do X com o centro do botão
+                var y = parseInt(alturaBotaoMenu * 0.1333);
+
+                // Tempo de animação da primeira linha
+                linhas[0].style.transition = animationTime;
+                // Teletransporta a primeira linha para a coordenada 36px no eixo y e rotaciona ela -45° em relação ao seu centro
+                linhas[0].style.transform = `translateY(${y}px) rotate(-45deg)`;
+                linhas[0].style.backgroundColor = 'red';
+
+                // Tempo de animação da terceira linha
+                linhas[2].style.transition = animationTime;
+                // Teletransporta a terceira linha para a coordenada -36px no eixo y e rotaciona ela 45° em relação ao seu centro
+                linhas[2].style.transform = `translateY(${-y}px) rotate(45deg)`;
+                linhas[2].style.backgroundColor = 'red';
+
+                // Muda o estado da variável de controle de clique no botão
+                clicouBotaoMenu = !clicouBotaoMenu;
+
+            }
+            // Mas se já tiver sido clicado, desfaz a animação
+            else {
+                // A borda do botão volta a ficar cinza
+                botaoMenu.style.border = '4px solid #ccc';
+
+                // A linha do meio aparece de forma animada crescendo a sua largura
+                linhas[1].style.transition = animationTime;
+                linhas[1].style.width = '66.66%';
+
+                // Reseta a translação do eixo y da primeira linha e reseta a rotação dela
+                linhas[0].style.transform = 'translateY(0px) rotate(0deg)';
+                linhas[0].style.backgroundColor = '#ccc';
+
+                // Reseta a translação do eixo y da terceira linha e reseta a rotação dela
+                linhas[2].style.transform = 'translateY(0px) rotate(0deg)';
+                linhas[2].style.backgroundColor = '#ccc';
+
+                // Muda o estado da variável de controle de clique no botão
+                clicouBotaoMenu = !clicouBotaoMenu;
+            }   
+        }
+        
+
+        // Constante que controla o tempo da animação
+        const animationTime = '0.2s';
+
+        var botaoMenu = document.querySelector('button#btn-menu');
+        alturaBotaoMenu = botaoMenu.getBoundingClientRect().height;
+
+
+        var linhas = document.querySelectorAll('span.linha');
+
+        // Inicializa a variável para controlar o estado de clique no botão como false (o botão começa não clicado)
+        clicouBotaoMenu = false;
+
+    </script>
+</body>
+</html>
